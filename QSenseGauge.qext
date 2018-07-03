@@ -1,7 +1,7 @@
 {
 	"name" : "Edited QSense Gauge",
 	"description" : "Edited QSense dual gauge",
-	"icon" : "text icon-image-prakhar",
+	"icon" : "text icon-image-excelcio",
 	"type" : "visualization",
 	"version": "1.0.2",
 	"author": "PK",
