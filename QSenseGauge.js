@@ -39,6 +39,28 @@ define(["./radialProgress", "./d3.min", "css!./QSenseGauge.css", "qlik"],
         color: "#545352"
       }
     };
+    //palette de sélection couleur 3
+    var ColorArc3 = {
+      ref: "Arc3",
+      type: "object",
+      component: "color-picker",
+      label: "Third arc",
+      defaultValue: {
+        index: 3,
+        color: "#7db8da"
+      }
+    };
+    //palette de sélection couleur 4
+    var ColorArc4 = {
+      ref: "Arc4",
+      type: "object",
+      component: "color-picker",
+      label: "Forth arc",
+      defaultValue: {
+        index: 4,
+        color: "#b6d7ea"
+      }
+    };
 
     var limite1 = {
       ref: "limite1",
@@ -52,7 +74,21 @@ define(["./radialProgress", "./d3.min", "css!./QSenseGauge.css", "qlik"],
       type: "integer",
       label: "Limite arc 2",
       expression: "always",
-      defaultValue: 100
+      defaultValue: 85
+    };
+    var limite3 = {
+      ref: "limite3",
+      type: "integer",
+      label: "Limite arc 3",
+      expression: "always",
+      defaultValue: 70
+    };
+    var limite4 = {
+      ref: "limite4",
+      type: "integer",
+      label: "Limite arc 4",
+      expression: "always",
+      defaultValue: 55
     };
 
     var imageGauge = {
@@ -92,6 +128,36 @@ define(["./radialProgress", "./d3.min", "css!./QSenseGauge.css", "qlik"],
 				}],
       defaultValue: true
     };
+    
+    var affichageMesure3 = {
+      type: "boolean",
+      component: "switch",
+      label: "Afficher la mesure 3",
+      ref: "affichage3",
+      options: [{
+        value: true,
+        label: "On"
+				}, {
+        value: false,
+        label: "Off"
+				}],
+      defaultValue: true
+    };
+
+    var affichageMesure4 = {
+      type: "boolean",
+      component: "switch",
+      label: "Afficher la mesure 4",
+      ref: "affichage4",
+      options: [{
+        value: true,
+        label: "On"
+				}, {
+        value: false,
+        label: "Off"
+				}],
+      defaultValue: true
+    };
 
     //définition de l'objet
     return {
@@ -112,7 +178,7 @@ define(["./radialProgress", "./d3.min", "css!./QSenseGauge.css", "qlik"],
           measures: {
             uses: "measures",
             min: 1,
-            max: 2
+            max: 4
           },
           Setting: {
             uses: "settings",
@@ -124,9 +190,13 @@ define(["./radialProgress", "./d3.min", "css!./QSenseGauge.css", "qlik"],
                 items: {
                   Colors1: ColorArc1,
                   Colors2: ColorArc2,
+		  Colors3: ColorArc3,
+                  Colors4: ColorArc4,
                   MediaGauge: imageGauge,
                   affichage1: affichageMesure1,
-                  affichage2: affichageMesure2
+                  affichage2: affichageMesure2,
+		  affichage3: affichageMesure3,
+                  affichage4: affichageMesure4
                 }
               },
               Limite: {
@@ -135,7 +205,9 @@ define(["./radialProgress", "./d3.min", "css!./QSenseGauge.css", "qlik"],
                 label: "Limites",
                 items: {
                   limite1: limite1,
-                  limite2: limite2
+                  limite2: limite2,
+		  limite3: limite3,
+                  limite4: limite4
                 }
               }
             }
@@ -185,26 +257,44 @@ define(["./radialProgress", "./d3.min", "css!./QSenseGauge.css", "qlik"],
           if (hc.qMeasureInfo[1].qFallbackTitle.length > 13) {
             tooLong = '... ';
           }
+	  if (hc.qMeasureInfo[2].qFallbackTitle.length > 13) {
+            tooLong = '... ';
+          }
+	  if (hc.qMeasureInfo[3].qFallbackTitle.length > 13) {
+            tooLong = '... ';
+          }
 
           var value2 = hc.qDataPages[0].qMatrix[0][1].qNum;
           var measureName2 = hc.qMeasureInfo[1].qFallbackTitle.substr(0, 13) + tooLong + hc.qDataPages[0].qMatrix[0][1].qText;
+	  var value3 = hc.qDataPages[0].qMatrix[0][2].qNum;
+          var measureName3 = hc.qMeasureInfo[1].qFallbackTitle.substr(0, 13) + tooLong + hc.qDataPages[0].qMatrix[0][2].qText;
+	  var value4 = hc.qDataPages[0].qMatrix[0][3].qNum;
+          var measureName4 = hc.qMeasureInfo[1].qFallbackTitle.substr(0, 13) + tooLong + hc.qDataPages[0].qMatrix[0][3].qText;
         }
 
 
-        //couleur arc 1 et 2
+        //couleur arc 1 et 4
         var colorAcr1 = layout.Arc1.color;
         var colorAcr2 = layout.Arc2.color;
+	var colorAcr3 = layout.Arc3.color;
+        var colorAcr4 = layout.Arc4.color;
 
 
         var iconGauge = layout.iconGauge;
         //Création de la jauge
-        var rad1 = radialProgress(div, width, height, [colorAcr1, colorAcr2], iconGauge, [layout.affichage1, layout.affichage2])
+        var rad1 = radialProgress(div, width, height, [colorAcr1, colorAcr2,colorAcr3, colorAcr4], iconGauge, [layout.affichage1, layout.affichage2,layout.affichage3, layout.affichage4])
           .value(value)
           .value2(value2)
+	  .value3(value3)
+          .value4(value4)
           .label(measureName)
           .label2(measureName2)
+	  .label3(measureName3)
+          .label4(measureName4)
           .maxValue(layout.limite1)
           .maxValue2(layout.limite2)
+	  .maxValu3(layout.limite3)
+          .maxValue4(layout.limite4)
           .render();
         //console.log(qlik.Promise.resolve());
         return qlik.Promise.resolve();
