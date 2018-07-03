@@ -141,7 +141,7 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
        var path3 = svg.select(".arcs").selectAll(".arc3").data(data);
       path.enter().append("path")
         .attr("class", "arc")
-        .attr("fill", colors[0])
+        .attr("fill", colors[2])
         .attr("transform", "translate(" + _width / 2 + "," + _width / 2 + ")")
         .attr("d", _arc3);
 			
@@ -149,7 +149,7 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
       var path4 = svg.select(".arcs").selectAll(".arc4").data(data);
       path2.enter().append("path")
         .attr("class", "arc4")
-        .attr("fill", colors[1])
+        .attr("fill", colors[3])
         .attr("transform", "translate(" + _width / 2 + "," + _width / 2 + ")")
         .attr("d", _arc4);
 
