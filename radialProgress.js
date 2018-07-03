@@ -1,26 +1,6 @@
 /**
  Copyright (c) 2014 BrightPoint Consulting, Inc.
-
- Permission is hereby granted, free of charge, to any person
- obtaining a copy of this software and associated documentation
- files (the "Software"), to deal in the Software without
- restriction, including without limitation the rights to use,
- copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the
- Software is furnished to do so, subject to the following
- conditions:
-
- The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- OTHER DEALINGS IN THE SOFTWARE.
+ Fully Edited!
  */
 function radialProgress(parent, width, height, colors, image, labelOK) {
   var colors = colors;
@@ -38,7 +18,9 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
     _diameter = Math.min(width, height), //150,
     _minDiam = _diameter,
     _label = "",
-		_label2 = "",
+    _label2 = "",
+    _label3 = "",
+    _label4 = "",
     _fontSize = 8;
 
 
@@ -46,12 +28,18 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
 
   var _value = 0,
     _value2 = 0,
+    _value3 = 0,
+    _value4 = 0,
     _minValue = 0,
     _maxValue = 100,
-	  _maxValue2 = 100;
+    _maxValue2 = 85,
+    _maxValue3 = 70,
+    _maxValue4 = 55;
 
   var _currentArc = 0,
     _currentArc2 = 0,
+    _currentArc3 = 0,
+    _currentArc4 = 0,
     _currentValue = 0,
 	  _angle=360,
 	  _radians=180;
@@ -61,8 +49,13 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
 
   var _arc2 = d3.svg.arc()
     .startAngle(0 * (Math.PI / _radians))
-    .endAngle(0); //just radians
-
+    .endAngle(270); //just radians
+  var _arc3 = d3.svg.arc()
+    .startAngle(0 * (Math.PI / _radians))
+    .endAngle(180); //just radians
+  var _arc4 = d3.svg.arc()
+    .startAngle(0 * (Math.PI / _radians))
+    .endAngle(90); //just radians
 
   _selection = d3.select(parent);
 
@@ -89,7 +82,8 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
 
       _arc.endAngle(_angle * (Math.PI / _radians))
       _arc2.endAngle(_angle * (Math.PI / _radians))
-	
+      _arc3.endAngle(_angle * (Math.PI / _radians))
+      _arc4.endAngle(_angle * (Math.PI / _radians))
 
       background.append("rect")
         .attr("class", "background")
@@ -108,7 +102,19 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
         .attr("transform", "translate(" + _width / 2 + "," + _width / 2 + ")")
         .attr("d", _arc2)
 			  .attr("opacity", 0)
-				.attr("y", 0)
+			  .attr("y", 0)
+			  .attr("x", 0);
+      background.append("path")
+        .attr("transform", "translate(" + _width / 2 + "," + _width / 2 + ")")
+        .attr("d", _arc3)
+			  .attr("opacity", 0)
+			  .attr("y", 0)
+			  .attr("x", 0);
+      background.append("path")
+        .attr("transform", "translate(" + _width / 2 + "," + _width / 2 + ")")
+        .attr("d", _arc)
+			  .attr("opacity", 0)
+			  .attr("y", 0)
 			  .attr("x", 0);
 
       var g = svg.select("g")
@@ -116,6 +122,7 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
 
       _arc.endAngle(_currentArc);
       enter.append("g").attr("class", "arcs");
+     
       var path = svg.select(".arcs").selectAll(".arc").data(data);
       path.enter().append("path")
         .attr("class", "arc")
@@ -130,6 +137,21 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
         .attr("fill", colors[1])
         .attr("transform", "translate(" + _width / 2 + "," + _width / 2 + ")")
         .attr("d", _arc2);
+      
+       var path3 = svg.select(".arcs").selectAll(".arc3").data(data);
+      path.enter().append("path")
+        .attr("class", "arc")
+        .attr("fill", colors[0])
+        .attr("transform", "translate(" + _width / 2 + "," + _width / 2 + ")")
+        .attr("d", _arc3);
+			
+      //Another path in case we exceed 100%
+      var path4 = svg.select(".arcs").selectAll(".arc4").data(data);
+      path2.enter().append("path")
+        .attr("class", "arc4")
+        .attr("fill", colors[1])
+        .attr("transform", "translate(" + _width / 2 + "," + _width / 2 + ")")
+        .attr("d", _arc4);
 
       enter.append("g").attr("class", "labels");
       var label = svg.select(".labels").selectAll(".label").data(data);
@@ -142,8 +164,8 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
         .attr("xlink:href", image);
 
 			
-			if(labelOK[0]){ 
-			  label.enter().append("text")
+	if(labelOK[0]){ 
+	  label.enter().append("text")
           .attr("class", "label")
           .attr("y", _height / 3)
           .attr("x", _height / 2)
@@ -153,7 +175,7 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
             return _label;
           })
           .style("font-size", _fontSize / 2 + "px");
-			}
+	}
 
 
       if (_value2 != 0 && labelOK[1]) {
@@ -166,6 +188,32 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
           //.attr("x",(3*_fontSize/2))
           .text(function(d) {
             return _label2;
+          })
+          .style("font-size", _fontSize / 2 + "px");
+	      
+       if (_value3 != 0 && labelOK[2]) {
+        label.enter().append("text")
+          .attr("class", "label")
+          .attr("y", _height / 2.0)
+          .attr("x", _height / 2)
+          .attr("width", _width)
+          .attr("fill", colors[0])
+          //.attr("x",(3*_fontSize/2))
+          .text(function(d) {
+            return _label3;
+          })
+          .style("font-size", _fontSize / 2 + "px");
+	       
+        if (_value4 != 0 && labelOK[3]) {
+        label.enter().append("text")
+          .attr("class", "label")
+          .attr("y", _height / 1.5)
+          .attr("x", _height / 2)
+          .attr("width", _width)
+          .attr("fill", colors[1])
+          //.attr("x",(3*_fontSize/2))
+          .text(function(d) {
+            return _label4;
           })
           .style("font-size", _fontSize / 2 + "px");
       }
@@ -192,11 +240,27 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
           path2.transition().duration(_duration)
             .attrTween("d", arcTween2);
 
-        } else if (ratio > 1) {
+        }else if (_value3 !== 0) {
+          ratio = (_value3 - _minValue) / (_maxValue3 - _minValue);
+          endAngle = Math.min(_angle * ratio, _angle);
+          endAngle = endAngle * Math.PI / _radians;
+          path3.datum(endAngle);
+          path3.transition().duration(_duration)
+            .attrTween("d", arcTween3);
+
+        }else if (_value4 !== 0) {
+          ratio = (_value4 - _minValue) / (_maxValue4 - _minValue);
+          endAngle = Math.min(_angle * ratio, _angle);
+          endAngle = endAngle * Math.PI / _radians;
+          path4.datum(endAngle);
+          path4.transition().duration(_duration)
+            .attrTween("d", arcTween4);
+
+        }else if (ratio > 1) {
 
           path2.datum(Math.min(_angle * (ratio - 1), _angle) * Math.PI / _radians);
           path2.transition().delay(_duration).duration(_duration)
-            .attrTween("d", arcTween2);
+            .attrTween("d", arcTween4);
 
         }
 
@@ -241,6 +305,20 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
       return _arc2.endAngle(i(t))();
     };
   }
+  function arcTween3(a) {
+    var i = d3.interpolate(_currentArc3, a);
+
+    return function(t) {
+      return _arc3.endAngle(i(t))();
+    };
+  }
+  function arcTween4(a) {
+    var i = d3.interpolate(_currentArc4, a);
+
+    return function(t) {
+      return _arc4.endAngle(i(t))();
+    };
+  }
 
 
   function measure() {
@@ -251,6 +329,10 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
     _arc.innerRadius(_width / 2 * .85);
     _arc2.outerRadius(_width / 2 * .85);
     _arc2.innerRadius(_width / 2 * .85 - (_width / 2 * .15));
+    _arc3.outerRadius(_width / 2 * .85 - (_width / 2 * .15));
+    _arc3.innerRadius(_width / 2 * .85 - (_width / 2 * .30));
+    _arc4.outerRadius(_width / 2 * .85 - (_width / 2 * .30));
+    _arc4.innerRadius(_width / 2 * .85 - (_width / 2 * .45));
   }
 
 
@@ -273,7 +355,19 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
     _selection.datum([_value2]);
     return component;
   }
+  component.value3 = function(_) {
+    if (!arguments.length) return _value3;
+    _value = [_];
+    _selection.datum([_value3]);
+    return component;
+  }
 
+  component.value4 = function(_) {
+    if (!arguments.length) return _value4;
+    _value2 = [_];
+    _selection.datum([_value4]);
+    return component;
+  }
 
   component.margin = function(_) {
     if (!arguments.length) return _margin;
@@ -298,9 +392,19 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
     _maxValue = _;
     return component;
   };
-	component.maxValue2 = function(_) {
+  component.maxValue2 = function(_) {
     if (!arguments.length) return _maxValue2;
     _maxValue2 = _;
+    return component;
+  };
+  component.maxValue3 = function(_) {
+    if (!arguments.length) return _maxValue3;
+    _maxValue3 = _;
+    return component;
+  };
+	component.maxValue4 = function(_) {
+    if (!arguments.length) return _maxValue4;
+    _maxValue3 = _;
     return component;
   };
 
@@ -312,6 +416,16 @@ function radialProgress(parent, width, height, colors, image, labelOK) {
 	component.label2 = function(_) {
     if (!arguments.length) return _label2;
     _label2 = _;
+    return component;
+  };
+  component.label = function(_) {
+    if (!arguments.length) return _label3;
+    _label3 = _;
+    return component;
+  };
+	component.label2 = function(_) {
+    if (!arguments.length) return _label4;
+    _label4 = _;
     return component;
   };
 
